@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL='https://api.openweathermap.org'
-const API_KEY='35dd2cef05c71d650e2efab42b461864'
+const API_KEY=process.env.REACT_APP_API_KEY
 
 const api = axios.create({
     baseURL:API_URL,
