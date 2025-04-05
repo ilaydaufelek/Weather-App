@@ -1,8 +1,5 @@
 {
-    "builds": [
-      { "src": "package.json", "use": "@vercel/static-build" }
-    ],
-    "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
+    "builds": [{ "src": "package.json", "use": "@vercel/static-build" }],
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "buildCommand": "CI=false npm run build"
   }

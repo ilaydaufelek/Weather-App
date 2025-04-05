@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build DISABLE_ESLINT_PLUGIN=true react-scripts build || echo ",
+    "build": "tsc && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
