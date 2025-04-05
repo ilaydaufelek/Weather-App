@@ -52,7 +52,7 @@ const WindyMap: React.FC<WindyMapProps> = ({
 
        
         windyInit(options,(windyAPI: WindyAPI) => {
-            const { map } = windyAPI;
+            const { } = windyAPI;
             
         });
     }, [latitude, longitude, zoom]);

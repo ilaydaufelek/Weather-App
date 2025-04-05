@@ -115,8 +115,8 @@ export default function WeatherWidget ({ onCitySelect }: WeatherWidgetProps){
                         }}
                         >
                            <button 
-                           type="button" className="w-full border border-[#181818] rounded-xl h-8 text-left mt-1 hover:bg-[#1818188a] ">
-                          <div className="ml-2" >
+                           type="button" className="w-full border border-[#181818] rounded-xl h-8 text-left mt-1  bg-black hover:bg-[#191B1F] z-20  ">
+                          <div className="ml-2 " >
                           {city.name} - {city.country}
                           </div>
                            </button>

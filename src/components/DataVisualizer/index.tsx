@@ -1,6 +1,6 @@
 import { getWeatherServices } from "@/servicies/getWeather";
 import { useQuery } from "@tanstack/react-query";
-import { CartesianGrid, Label, Line, LineChart, Pie, PieChart, XAxis, YAxis, Tooltip, ResponsiveContainer, Area, AreaChart } from "recharts";
+import {  Label,   Pie, PieChart,  ResponsiveContainer, Area, AreaChart } from "recharts";
 import * as React from "react";
 import {
   Card,

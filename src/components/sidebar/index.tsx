@@ -1,6 +1,6 @@
 import { useIsMobile } from "@/hooks/usemobil-hooks"
 
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
+import { Sheet, SheetContent,   SheetTrigger } from "../ui/sheet"
 
 export default function SideBar (){
   const useMobil = useIsMobile()
