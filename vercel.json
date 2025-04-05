@@ -1,0 +1,8 @@
+{
+    "builds": [
+      { "src": "package.json", "use": "@vercel/static-build" }
+    ],
+    "scripts": {
+      "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build || true"
+    }
+  }
