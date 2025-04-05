@@ -195,14 +195,14 @@ export default function DataVisualizer({ city }: DataWeatherProp) {
                           <tspan
                             x={viewBox.cx}
                             y={viewBox.cy}
-                            className="text-3xl font-bold fill-[#ffff]"
+                            className="text-3xl font-bold fill-[#ffff] bg-white"
                           >
                            %{totalWeather.toLocaleString()}
                           </tspan>
                           <tspan
                             x={viewBox.cx}
                             y={(viewBox.cy || 0) + 24}
-                            className="fill-muted-foreground"
+                            className="fill-[#ffff]  "
                           >
                             Humidity
                           </tspan>
@@ -249,7 +249,7 @@ export default function DataVisualizer({ city }: DataWeatherProp) {
                           <tspan
                             x={viewBox.cx}
                             y={(viewBox.cy || 0) + 24}
-                            className="fill-muted-foreground"
+                            className="fill-[#ffff]"
                           >
                             Pollen Density
                           </tspan>
