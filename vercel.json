@@ -1,5 +1,9 @@
 {
-    "builds": [{ "src": "package.json", "use": "@vercel/static-build" }],
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
-  "buildCommand": "CI=false npm run build"
+    "version": 2,
+    "framework": "vite",
+    "rewrites": [{ "source": "/(.*)", "destination": "/" }],
+    "buildCommand": "pnpm build",
+    "outputDirectory": "dist",
+    "devCommand": "pnpm dev",
+    "installCommand": "pnpm install"
   }
