@@ -1,11 +1,10 @@
 import { getWeatherServices } from "@/servicies/getWeather";
 import { useQuery } from "@tanstack/react-query";
-import {  Label,   Pie, PieChart,  ResponsiveContainer, Area, AreaChart } from "recharts";
+import { Label, Pie, PieChart, ResponsiveContainer, Area, AreaChart } from "recharts";
 import * as React from "react";
 import {
   Card,
   CardContent,
-  
 } from "@/components/ui/card";
 import {
   ChartContainer,
@@ -32,7 +31,6 @@ export default function DataVisualizer({ city }: DataWeatherProp) {
     country: "TR",
   };
 
-  // Polen yoğunluğu hesaplama fonksiyonu
   const calculatePollenDensity = (
     temperature: number,
     windSpeed: number,
@@ -56,20 +54,16 @@ export default function DataVisualizer({ city }: DataWeatherProp) {
     enabled: !!selectedCity,
   });
 
-  // Sıcaklık, rüzgar hızı ve nem verilerini al
   const temperature = data?.main?.temp || 0;
   const windSpeed = data?.wind?.speed || 0;
   const humidity = data?.main?.humidity || 0;
-
-  // Polen yoğunluğunu hesapla
   const pollenDensity = calculatePollenDensity(temperature, windSpeed, humidity);
 
-  // Nem verisi için grafik verisi
   const chartData = [
     {
       name: "Humidity",
-      value: data?.main?.humidity || 0, // Nem verisini kullanıyoruz
-      fill: "#1d9bf0", // Kendi renginizi burada belirleyebilirsiniz
+      value: data?.main?.humidity || 0,
+      fill: "#1d9bf0",
     },
   ];
 
@@ -77,19 +71,15 @@ export default function DataVisualizer({ city }: DataWeatherProp) {
     return chartData.reduce((acc, curr) => acc + curr.value, 0);
   }, [chartData]);
 
-  // Polen yoğunluğu verisi için grafik verisi
   const pollenChartData = [
     {
       name: "Pollen Density",
       value: pollenDensity,
-      fill: "#ffea80", 
+      fill: "#ffea80",
     },
   ];
 
-  // Rüzgar hızını görselleştiren veriler
   const currentMonth = new Date().toLocaleString("en-US", { month: "short" });
-
-  // Tüm aylar için varsayılan rüzgar hızı verileri
   const windSpeedData = [
     { month: "Jan", windSpeed: 15 },
     { month: "Feb", windSpeed: 20 },
@@ -105,73 +95,65 @@ export default function DataVisualizer({ city }: DataWeatherProp) {
     { month: "Dec", windSpeed: 23 },
   ];
 
-  // Eğer şu anki ay ile eşleşiyorsa, veriyi güncelle
   const updatedWindSpeedData = windSpeedData.map((data) => {
     if (data.month === currentMonth) {
-      return { month: currentMonth, windSpeed: windSpeed }; // Bu ay için dinamik veri
+      return { month: currentMonth, windSpeed: windSpeed };
     }
-    return data; // Diğer aylar için varsayılan değerler
+    return data;
   });
-  const now =new Date()
-  const hours= now.getHours()
-  const minutes= now.getMinutes().toString().padStart(2,'0')
 
-  const pressure= data?.main?.pressure
+  const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes().toString().padStart(2, "0");
+  const pressure = data?.main?.pressure;
 
-  let pressureMessage =''
-  if( pressure < 1000){
-    pressureMessage='You might feel a bit overwhelmed.'
-  }
-  else {
-    pressureMessage='Ideal pressure, the air feels refreshing.'
+  let pressureMessage = "";
+  if (pressure < 1000) {
+    pressureMessage = "You might feel a bit overwhelmed.";
+  } else {
+    pressureMessage = "Ideal pressure, the air feels refreshing.";
   }
 
   return (
-    <Card className="flex flex-col bg-black border-none  ">
-      <CardContent className="flex-1 pb-0  ">
-        {/* Nem ve Polen Grafikleri Yan Yana */}
-        <div className="flex space-x-4 gap-3 ">
+    <Card className="flex flex-col bg-black border-none">
+      <CardContent className="flex-1 pb-0 ">
+        {/* Grafikler için responsive container */}
+        <div className="flex flex-col md:flex-row md:space-x-4 gap-3 ">
+          {/* Rüzgar Hızı Grafiği */}
+          <div className="w-full md:w-[400px] h-[250px] border border-[#333639] relative rounded-2xl  ">
+            <ResponsiveContainer>
+              <ChartContainer config={{}}>
+                <AreaChart accessibilityLayer data={updatedWindSpeedData}>
+                  <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                  <defs>
+                    <linearGradient id="fillWindSpeed" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#4584A7" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#4584A7" stopOpacity={0.1} />
+                    </linearGradient>
+                  </defs>
+                  <Area
+                    dataKey="windSpeed"
+                    type="natural"
+                    fill="url(#fillWindSpeed)"
+                    fillOpacity={0.4}
+                    stroke="#4584A7"
+                  />
+                </AreaChart>
+              </ChartContainer>
+            </ResponsiveContainer>
+            <div className="absolute bottom-0 left-0 flex items-center justify-between w-full ml-2 text-white py-2">
+              <div className="text-[25px]">
+                {data?.wind?.speed || 0}
+                <span className="text-[#ffffff5b] text-[15px] ml-2">km/h</span>
+              </div>
+              <div className="mr-4 text-[#ffffffc5] text-[16px]">{hours}:{minutes}</div>
+            </div>
+          </div>
 
-           {/* Rüzgar Hızı Grafiği */}
-           <div className="w-full max-w-[400px] mx-0 h-[250px] border  border-[#333639] relative rounded-2xl">
-           <ResponsiveContainer>
-       <ChartContainer config={{}}>
-       <AreaChart
-      accessibilityLayer
-      data={updatedWindSpeedData}
-     
-    >
-      
-      <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-      <defs>
-        <linearGradient id="fillWindSpeed" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="5%" stopColor="#4584A7" stopOpacity={0.8} />
-          <stop offset="95%" stopColor="#4584A7" stopOpacity={0.1} />
-        </linearGradient>
-      </defs>
-      <Area
-        dataKey="windSpeed"
-        type="natural"
-        fill="url(#fillWindSpeed)"
-        fillOpacity={0.4}
-        stroke="#4584A7"
-      />
-    </AreaChart>
-  </ChartContainer>
-</ResponsiveContainer>
-<div className="absolute bottom-0 left-0 flex items-center justify-between w-full ml-2 text-white py-2">
-  <div className="text-[25px]">
-    {data?.wind?.speed || 0}<span className="text-[#ffffff5b] text-[15px] ml-2">km/h</span>
-  </div>
-  <div className="mr-4 text-[#ffffffc5] text-[16px]">{hours}:{minutes}</div>
-</div>
-
-          
-        </div>
-          {/* Nem verisi için grafik */}
+          {/* Nem Grafiği */}
           <ChartContainer
             config={{}}
-            className="w-full max-w-[300px] mx-0 my-0 h-[250px] border border-[#333639] rounded-2xl"
+            className="w-full md:w-[300px] h-[250px] border border-[#333639] rounded-2xl"
           >
             <PieChart>
               <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
@@ -197,12 +179,12 @@ export default function DataVisualizer({ city }: DataWeatherProp) {
                             y={viewBox.cy}
                             className="text-3xl font-bold fill-[#ffff] bg-white"
                           >
-                           %{totalWeather.toLocaleString()}
+                            %{totalWeather.toLocaleString()}
                           </tspan>
                           <tspan
                             x={viewBox.cx}
                             y={(viewBox.cy || 0) + 24}
-                            className="fill-[#ffff]  "
+                            className="fill-[#ffff]"
                           >
                             Humidity
                           </tspan>
@@ -215,10 +197,10 @@ export default function DataVisualizer({ city }: DataWeatherProp) {
             </PieChart>
           </ChartContainer>
 
-          {/* Polen yoğunluğu verisi için grafik */}
+          {/* Polen Yoğunluğu Grafiği */}
           <ChartContainer
             config={{}}
-            className="w-full max-w-[300px] mx-0 h-[250px] border border-[#333639] rounded-2xl"
+            className="w-full md:w-[300px] h-[250px] border border-[#333639] rounded-2xl"
           >
             <PieChart>
               <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
@@ -244,7 +226,7 @@ export default function DataVisualizer({ city }: DataWeatherProp) {
                             y={viewBox.cy}
                             className="text-3xl font-bold fill-[#ffff]"
                           >
-                            {pollenDensity.toFixed(2)} {/* Polen yoğunluğu */}
+                            {pollenDensity.toFixed(2)}
                           </tspan>
                           <tspan
                             x={viewBox.cx}
@@ -261,24 +243,19 @@ export default function DataVisualizer({ city }: DataWeatherProp) {
               </Pie>
             </PieChart>
           </ChartContainer>
- 
-
-
         </div>
-
-      
-       
       </CardContent>
-      <div className="flex space-x-4  ml-5" >
-      <div className="text-white border border-[#333639] w-[400px]  h-[125px] rounded-2xl  ">
-        <h2 className="text-[#bebebe] font-semibold ml-2 mt-2  " >Pressure</h2>
-        <div className="flex justify-between mt-6 " >
-        <div className=" text-[22px] font-semibold ml-2 " >
-         {pressure}
-          <span className="text-[15px]  text-[#bebebe] ml-1" >hPa</span>
-        </div>
-        
-        <p className="w-[140px] text-[14px] text-[#bebebe]  " >
+
+      {/* Alt Bilgi Kartları */}
+      <div className="flex flex-col md:flex-row md:space-x-4 gap-3 ml-5 mt-3">
+        <div className="text-white border border-[#333639] w-full md:w-[400px] h-[125px] rounded-2xl">
+          <h2 className="text-[#bebebe] font-semibold ml-2 mt-2">Pressure</h2>
+          <div className="flex justify-between mt-6">
+            <div className="text-[22px] font-semibold ml-2">
+              {pressure}
+              <span className="text-[15px] text-[#bebebe] ml-1">hPa</span>
+            </div>
+            <p className="w-[140px] text-[14px] text-[#bebebe]  " >
           <span className="flex items-center justify-center mr-4 " >
             <svg
             width={18}
@@ -289,17 +266,17 @@ export default function DataVisualizer({ city }: DataWeatherProp) {
           </svg></span>
        
           {pressureMessage}</p>
+          </div>
         </div>
-      </div>
-      <div className="text-white border border-[#333639] w-[300px] h-[125px] rounded-2xl   ">
-      <h2 className="text-[#bebebe] font-semibold ml-2 mt-2  " >Visibility</h2>
-        <div className="flex justify-between mt-6 " >
-        <div className=" text-[22px] font-semibold ml-2 " >
-        {(data?.visibility /1000).toFixed(1).padStart(3,'0')}
-          <span className="text-[15px]  text-[#bebebe] ml-1 " >km</span>
-        </div>
-        
-        <p className="w-[120px] text-[14px] text-[#bebebe]  " >
+
+        <div className="text-white border border-[#333639] w-full md:w-[300px] h-[125px] rounded-2xl">
+          <h2 className="text-[#bebebe] font-semibold ml-2 mt-2">Visibility</h2>
+          <div className="flex justify-between mt-6">
+            <div className="text-[22px] font-semibold ml-2">
+              {(data?.visibility / 1000).toFixed(1).padStart(3, "0")}
+              <span className="text-[15px] text-[#bebebe] ml-1">km</span>
+            </div>
+            <p className="w-[120px] text-[14px] text-[#bebebe]  " >
           <span  className="flex items-center justify-center mr-4  " >
           <svg 
           width={18}
@@ -310,15 +287,14 @@ export default function DataVisualizer({ city }: DataWeatherProp) {
           </svg></span>
        
           Haze is affecting visibility</p>
+          </div>
         </div>
-      </div>
-      <div className="text-white border border-[#333639] w-[300px] h-[125px] rounded-2xl  ">
-      <h2 className="text-[#bebebe] font-semibold ml-2 mt-2  " >Feels Like</h2>
-    
-        <div className="flex justify-between mt-6 " >
-        
-        <div className=" text-[24px] font-semibold ml-2 flex items-center " >
-          <span className="mr-2">
+
+        <div className="text-white border border-[#333639] w-full md:w-[300px] h-[125px] rounded-2xl">
+          <h2 className="text-[#bebebe] font-semibold ml-2 mt-2">Feels Like</h2>
+          <div className="flex justify-between mt-6">
+            <div className="text-[24px] font-semibold ml-2 flex items-center">
+            <span className="mr-2">
           <svg 
         width={20}
         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
@@ -331,14 +307,13 @@ export default function DataVisualizer({ city }: DataWeatherProp) {
           <span className="text-[15px]  text-[#bebebe] ml-1 " >°</span>
         </div>
         
-        <p className="w-[140px] text-[14px] text-[#bebebe]  " >
+        <p className="w-[140px] text-[14px] text-[#bebebe] lg:mr-2 lg:mt-2 " >
         
        
           Humidity is making it feel hotter</p>
+          </div>
         </div>
       </div>
-      </div>
     </Card>
-    
   );
 }

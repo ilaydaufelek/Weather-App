@@ -64,7 +64,7 @@ const WindyMap: React.FC<WindyMapProps> = ({
         
             ref={mapContainerRef} 
             id="windy" 
-           className='w-[1100px] h-[430px] rounded-2xl mb-2 hidden lg:block md:block '
+           className="w-full md:w-[900px] lg:w-[1100px] h-[300px] md:h-[400px] lg:h-[420px] rounded-2xl mb-2 md:block hidden"
         />
     );
 };
