@@ -16,9 +16,20 @@ export const getWeatherServices= {
     const response= await api.get('/geo/1.0/direct',{
         params:{
             q:cityName,
-            limit:5
+            limit:5,
+           
         }
     })
+    return response.data
+   },
+   fiveDayWeather:async(lat:number, lon:number)=>{
+    const response = await api.get('/data/2.5/forecast',{
+        params:{
+            lat,
+            lon,
+        }
+    })
+    console.log(response.data ,'5 güğn')
     return response.data
    }
 }
